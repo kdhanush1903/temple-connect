@@ -78,6 +78,9 @@
 		<artifactId>jjwt-jackson</artifactId>
 		<version>0.12.5</version>
 		</dependency>
+
+
+
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>dynamodb-enhanced</artifactId>

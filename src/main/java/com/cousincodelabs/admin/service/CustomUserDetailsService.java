@@ -9,9 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
+import software.amazon.awssdk.services.dynamodb.model.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,26 +30,29 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("Fetching user: " + username);
 
-        // Construct the key for DynamoDB using the 'id' attribute
-        Map<String, AttributeValue> key = new HashMap<>();
-        key.put("id", AttributeValue.builder().s(username).build());
+        // Step 1: Scan to find the user by username
+        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+        expressionAttributeValues.put(":username", AttributeValue.builder().s(username).build());
 
-        GetItemRequest getItemRequest = GetItemRequest.builder()
+        ScanRequest scanRequest = ScanRequest.builder()
                 .tableName("Admin")
-                .key(key)
+                .filterExpression("username = :username")
+                .expressionAttributeValues(expressionAttributeValues)
                 .build();
 
         try {
-            GetItemResponse response = dynamoDbClient.getItem(getItemRequest);
-            Map<String, AttributeValue> item = response.item();
+            ScanResponse scanResponse = dynamoDbClient.scan(scanRequest);
+            Map<String, AttributeValue> item = scanResponse.items().stream().findFirst().orElse(null);
 
             if (item == null || item.isEmpty()) {
                 throw new UsernameNotFoundException("User not found");
             }
 
+            String id = item.get("id").s();
             String password = item.get("password").s();
+
             return User.withUsername(username)
-                    .password(password) // Use the password directly from DynamoDB
+                    .password(password) // Ensure you use the correct password format
                     .roles("ADMIN")
                     .build();
         } catch (Exception e) {
@@ -59,6 +60,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             System.err.println("Error retrieving user from DynamoDB: " + e.getMessage());
             throw new UsernameNotFoundException("User not found");
         }
-    }
+    }}
 
-}
+
