@@ -1,4 +1,4 @@
-package com.cousincodelabs.repository;
+package com.cousincodelabs.admin.repository;
 
 import com.cousincodelabs.admin.entity.Admin;
 import org.springframework.stereotype.Repository;

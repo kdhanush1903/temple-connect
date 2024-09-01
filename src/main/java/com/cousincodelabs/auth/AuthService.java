@@ -22,10 +22,16 @@ public class AuthService {
     private JwtTokenUtil jwtTokenUtil;
 
     public JwtResponse login(LoginRequest loginRequest) {
+        String usernameOrEmail = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+
+        System.out.println("Username/Email: " + usernameOrEmail);
+        System.out.println("Password: " + password);
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
-                        loginRequest.getPassword()
+                        usernameOrEmail,
+                        password
                 )
         );
 
@@ -34,7 +40,8 @@ public class AuthService {
         String token = jwtTokenUtil.generateToken(username);
         String role = userDetails.getAuthorities().toString();
 
-        return new JwtResponse(token, username, userDetails.getAuthorities().toString(),role);
+        return new JwtResponse(token, username, userDetails.getAuthorities().toString(), role);
     }
+
 
 }

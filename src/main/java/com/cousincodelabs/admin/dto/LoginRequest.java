@@ -1,23 +1,21 @@
 package com.cousincodelabs.admin.dto;
 
-
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginRequest {
 
-    @NotBlank(message = "Username or Email is required")
-    private String usernameOrEmail;
+    @NotBlank(message = "Username is required")
+    private String username;
 
     @NotBlank(message = "Password is required")
     private String password;
 
-
-    public String getUsernameOrEmail() {
-        return usernameOrEmail;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUsernameOrEmail(String usernameOrEmail) {
-        this.usernameOrEmail = usernameOrEmail;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -28,4 +26,3 @@ public class LoginRequest {
         this.password = password;
     }
 }
-
