@@ -5,6 +5,7 @@ import com.cousincodelabs.admin.dto.LoginRequest;
 import com.cousincodelabs.admin.service.AdminService;
 import com.cousincodelabs.auth.AuthService;
 import com.cousincodelabs.auth.JwtResponse;
+import com.cousincodelabs.exception.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,13 @@ public class AdminController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AdminResponse> registerAdmin(@RequestBody AdminRequest adminRequest) {
-        AdminResponse response = adminService.register(adminRequest);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<?> registerAdmin(@RequestBody AdminRequest adminRequest) {
+        try {
+            AdminResponse response = adminService.register(adminRequest);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login")

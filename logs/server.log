@@ -1,0 +1,11 @@
+2024-09-07 13:32:38 - Starting TempleConnectApplication using Java 22.0.2 with PID 71536 (/Users/abcd/Music/temple-connect/target/classes started by abcd in /Users/abcd/Music/temple-connect)
+2024-09-07 13:32:38 - Running with Spring Boot v3.3.3, Spring v6.1.12
+2024-09-07 13:32:38 - No active profile set, falling back to 1 default profile: "default"
+2024-09-07 13:32:38 - Tomcat initialized with port 8080 (http)
+2024-09-07 13:32:38 - Root WebApplicationContext: initialization completed in 565 ms
+2024-09-07 13:32:39 - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-09-07 13:32:39 - Tomcat started on port 8080 (http) with context path '/'
+2024-09-07 13:32:39 - Started TempleConnectApplication in 1.424 seconds (process running for 1.633)
+2024-09-07 13:32:45 - Initializing Servlet 'dispatcherServlet'
+2024-09-07 13:32:45 - Completed initialization in 1 ms
+2024-09-07 13:32:45 - Registering admin with email: admin@example.com

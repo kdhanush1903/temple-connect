@@ -4,6 +4,8 @@ import com.cousincodelabs.admin.dto.AdminRequest;
 import com.cousincodelabs.admin.dto.AdminResponse;
 import com.cousincodelabs.admin.entity.Admin;
 import com.cousincodelabs.admin.repository.AdminRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import java.util.UUID;
 
 @Service
 public class AdminService {
+    private static final Logger logger = LoggerFactory.getLogger(AdminService.class);
+
 
     @Autowired
     private AdminRepository adminRepository;
@@ -27,8 +31,9 @@ public class AdminService {
 
 
     public AdminResponse register(AdminRequest adminRequest) {
-        if (adminRepository.findByUsername(adminRequest.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
+        if (adminRepository.findByEmail(adminRequest.getEmail()).isPresent()) {
+            logger.warn("Email already exists: {}", adminRequest.getEmail());
+            throw new IllegalArgumentException("Email already exists");
         }
 
         Admin admin = new Admin();
@@ -40,6 +45,7 @@ public class AdminService {
         admin.setLastName(adminRequest.getLastName());
 
         admin = adminRepository.save(admin);
+        logger.info("Admin successfully registered: {}", admin.getEmail());
 
         return new AdminResponse(admin.getId(), admin.getUsername(), admin.getEmail(), admin.getFirstName(), admin.getLastName());
     }

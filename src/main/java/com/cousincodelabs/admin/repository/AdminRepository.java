@@ -19,18 +19,19 @@ public class AdminRepository {
         this.adminTable = dynamoDbEnhancedClient.table("Admin", TableSchema.fromBean(Admin.class));
     }
 
-    public Optional<Admin> findByUsername(String username) {
+    public Optional<Admin> findByEmail(String email) {
         try {
             return adminTable.scan()
                     .items()
                     .stream()
-                    .filter(admin -> admin.getUsername().equals(username))
+                    .filter(admin -> admin.getEmail().equals(email))
                     .findFirst();
         } catch (DynamoDbException e) {
             e.printStackTrace();
             return Optional.empty();
         }
     }
+
 
     public Admin save(Admin admin) {
         try {
